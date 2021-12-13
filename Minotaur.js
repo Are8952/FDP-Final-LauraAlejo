@@ -1,7 +1,7 @@
 class Minotaur extends Enemy {
     constructor(col, fil, nivelActual) {
         super(col, fil, nivelActual);
-        this.image = loadImage("./Image/Minotaur.png");
+        this.image = loadImage("Image/Minotaur.png");
         this.vida = 100;
     }
 
