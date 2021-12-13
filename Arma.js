@@ -19,9 +19,7 @@ class Arma {
         return this.municion;
     }
 
-    mostrar(nx, ny) {
-        fill(0, 255, 255);
-        ellipse(this.positionX, this.positionY, 25, 25);
+    mostrar() {
         for (let index = 0; index < this.municion.length; index++) {
             const bala = this.municion[index];
             bala.mostrar();

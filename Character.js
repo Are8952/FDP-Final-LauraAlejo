@@ -7,6 +7,7 @@ class Character {
         this.vida = vida;
         this.inventario = [];
         this.imageCharacter = loadImage("./image/Hero.png");
+        this.rayo = loadImage("./Image/Rayo.png");
         this.damage = damage;
         //img = loadImage('assets/laDefense.jpg');
     }
@@ -30,12 +31,14 @@ class Character {
         //console.log(this.validarLaser);
         if (this.validarLaser()) {
             fill(255);
-            circle(this.positionX, this.positionY, 20);
+            noStroke();
+            image(this.rayo, this.positionX - 10, this.positionY + 20, 30, 30);
+            //circle(this.positionX, this.positionY, 10);
             this.inventario[0].mostrar();
         }
     }
 
-    recalcularPosPj(key, nivel) {
+    recalcularPosPj(key, nivel, pantalla) {
         switch (key) {
             case 'a': //Izquierda
                 if (this.fil > 0 && nivel[this.col][this.fil - 1] != 1 && nivel[this.col][this.fil - 1] != 4) {
@@ -61,7 +64,20 @@ class Character {
                 break;
             case 'z': //Talk
                 if (nivel[this.col + 1][this.fil] == 4) {
-                    alert("Toma el arma y recuerda que solo puedes disparar a tu derecha");
+                    switch (pantalla) {
+                        case 0:
+                            alert("¡Busca cerca al primer arbusto un arma secreta! y dispara con la 'x' ");
+                            break;
+                        case 1:
+                            alert("Toma la mejora para tu rayo");
+                            break;
+                        case 2:
+                            alert("Donde esta la vida, es un buen lugar para disparar");
+                            break;
+                        case 3:
+                            alert("Utiliza la mejora para derrotar Charybdis, si te toca te matará");
+                            break;
+                    }
                 }
                 break;
         }

@@ -2,14 +2,14 @@ class Map {
     constructor(nivelActual) {
         this.niveles = [this.nivelA, this.nivelB, this.nivelC, this.nivelD];
         this.nivelA = [
-            [1, 0, 1, 1, 0, 1, 0, 0],
+            [1, 0, 1, 1, 0, 3, 0, 0],
             [0, 0, 1, 0, 0, 0, 0, 1],
             [0, 0, 1, 0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0, 1, 0, 0],
             [0, 1, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0, 0, 0],
             [0, 0, 1, 1, 0, 0, 0, 0],
-            [4, 1, 1, 0, 0, 0, 0, 3],
+            [4, 1, 1, 0, 0, 0, 0, 0],
         ];
 
         this.nivelB = [
@@ -42,11 +42,11 @@ class Map {
             [0, 0, 1, 0, 0, 0, 1, 3],
             [0, 0, 1, 0, 1, 1, 1, 0],
             [0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 1, 4, 1, 1, 0, 1],
+            [4, 0, 1, 0, 1, 1, 0, 1],
         ];
         this.nivelActual = nivelActual;
         if (this.nivelActual == 0) {
-            this.laser = new Arma(1, 1);
+            this.laser = new Arma(0, 1);
         } else {
             //this.laser.setFila(-1);
             //this.laser.setCol(-1);

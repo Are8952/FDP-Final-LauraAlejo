@@ -8,18 +8,18 @@ let colu = 8; //Tamaño del mapa en el eje X?
 //Minotaur
 let minoCol = [];
 let minoFil = [];
-minoCol[1] = 6;
-minoFil[1] = 7;
-minoCol[0] = 3;
-minoFil[0] = 6;
+minoCol[1] = 1;
+minoFil[1] = 4;
+minoCol[0] = 4;
+minoFil[0] = 4;
 
 //Medusa
 let meduCol = [];
 let meduFil = [];
-meduCol[0] = 0;
-meduFil[0] = 6;
-meduCol[1] = 2;
+meduCol[1] = 0;
 meduFil[1] = 6;
+meduCol[0] = 3;
+meduFil[0] = 5;
 
 //Aracne
 let aracCol = [];
@@ -46,10 +46,15 @@ let zelda; //Declarar el objeto
 let minotaur = []; //Primer Enemigo
 let link = []; //Declaraar el aliado
 let curacion = []; //Objeto
+let curacion2 = []; //Objeto 2
+let curacion3 = []; //Objeto 3
+let curacion4 = []; //Objeto 4
 let medusa = []; //Segundo Enemigo
 let aracne = []; //Tercer Enemigo
 let charybdis = []; //Cuarto Enemigo
-let mejora;
+let mejora = [];
+// let mejora2;
+// let mejora3;
 let mapa;
 
 let backgroundMap = [];
@@ -78,19 +83,38 @@ function setup() {
     link[0] = new Ally(7, 0);
     link[1] = new Ally(4, 2);
     link[2] = new Ally(4, 3);
-    link[3] = new Ally(7, 3);
+    link[3] = new Ally(7, 0);
     for (let index = 0; index < 2; index++) {
         curacion.push(new Life(8, 8));
-        curacion.push(new Life(3, 4));
+        curacion.push(new Life(7, 7));
     }
 
-    mejora = new Mejora(5, 3);
+    for (let index = 0; index < 2; index++) {
+        curacion2.push(new Life(8, 8));
+        curacion2.push(new Life(2, 4));
+    }
+
+    for (let index = 0; index < 2; index++) {
+        curacion3.push(new Life(8, 8));
+        curacion3.push(new Life(5, 1));
+    }
+
+    for (let index = 0; index < 2; index++) {
+        curacion4.push(new Life(8, 8));
+        curacion4.push(new Life(2, 3));
+    }
+
+    mejora[0] = new Mejora(5, 3);
+    mejora[1] = new Mejora(2, 2);
+    mejora[2] = new Mejora(4, 5);
+    // mejora3 = new Mejora();
 
     backgroundMap[0] = loadImage("./image/background1.jpg");
     backgroundMap[1] = loadImage("./image/background2.jpg");;
     backgroundMap[2] = loadImage("./image/background3.jpg");;
     backgroundMap[3] = loadImage("./image/background4.jpg");;
-    nivelActual = 3;
+
+    nivelActual = 0;
 
 }
 
@@ -101,6 +125,7 @@ function draw() {
         case 0:
             imageMode(CORNER);
             image(backgroundMap[0], 0, 0, 800, 800);
+            fill(0);
             text("Vida: " + zelda.getVida(), 50, 850);
             minotaur.forEach(minotauro => {
                 minotauro.characterDraw();
@@ -121,35 +146,74 @@ function draw() {
             validarCapturaArma();
             validarMejoraArma();
             link[1].characterDraw();
-            mejora.mostrar();
+            mejora[0].mostrar(nivelActual);
             //MEDUSA
             validarHerirEnemigo();
             medusa.forEach(element => {
                 element.characterDraw();
                 //element.mover();
             });
-
+            fill(0);
+            text("Vida: " + zelda.getVida(), 50, 850);
+            if (zelda.getVida() == 0) {
+                nivelActual = 5;
+            }
+            curacion2.forEach(element => {
+                element.characterDraw();
+            });
             break;
         case 2:
             imageMode(CORNER);
             image(backgroundMap[2], 0, 0, 800, 800);
             link[2].characterDraw();
+            validarCapturaArma();
+            validarHerirEnemigo();
+            mejora[1].mostrar(nivelActual);
+            validarMejoraArma();
             aracne.forEach(element => {
                 element.characterDraw();
                 //element.mover();
             });
+            if (zelda.getVida() == 0) {
+                nivelActual = 5;
+            }
+            curacion3.forEach(element => {
+                element.characterDraw();
+            });
+            fill(0);
+            text("Vida: " + zelda.getVida(), 50, 850);
             break;
         case 3:
             imageMode(CORNER);
             image(backgroundMap[3], 0, 0, 800, 800);
             link[3].characterDraw();
+            validarCapturaArma();
+            validarHerirEnemigo();
+            mejora[2].mostrar(nivelActual);
+            validarMejoraArma();
             charybdis.forEach(element => {
                 element.characterDraw();
                 element.mover();
             });
-
+            if (zelda.getVida() <= 0) {
+                nivelActual = 5;
+            }
+            curacion4.forEach(element => {
+                element.characterDraw();
+            });
+            for (let index = 0; index < charybdis.length; index++) {
+                let distanciaProtagonistaVscharybdis = dist(charybdis[index].getCol(),
+                    charybdis[index].getFil(), zelda.getCol(), zelda.getFil());
+                if (distanciaProtagonistaVscharybdis == 0) {
+                    zelda.setVida(zelda.getVida() - 1);
+                }
+            }
             break;
         case 4:
+            fill(0, 0, 0);
+            textSize(100);
+            textAlign(CENTER);
+            background(0, 0, 255);
             text("GANASTE", width / 2, height / 2);
             break;
         case 5:
@@ -174,7 +238,7 @@ function keyPressed() {
                 case 'd':
                 case 'w':
                 case 'z':
-                    zelda.recalcularPosPj(key, mapa.getNivelA());
+                    zelda.recalcularPosPj(key, mapa.getNivelA(), nivelActual);
                     break;
                 case 'x':
                     zelda.disparar();
@@ -203,18 +267,79 @@ function keyPressed() {
                 case 'd':
                 case 'w':
                 case 'z':
-                    zelda.recalcularPosPj(key, mapa.getNivelB());
+                    zelda.recalcularPosPj(key, mapa.getNivelB(), nivelActual);
                     break;
                 case 'x':
                     zelda.disparar();
                     break;
             }
+            for (let index = 0; index < medusa.length; index++) {
+                let distanciaProtagonistaVsMedusa = dist(medusa[index].getCol(),
+                    medusa[index].getFil(), zelda.getCol(), zelda.getFil());
+                if (distanciaProtagonistaVsMedusa == 0) {
+                    zelda.setVida(zelda.getVida() - 1);
+                }
+            }
+            for (let index = 0; index < curacion2.length; index++) {
+                let distanciaProtagonistaVsHeal = dist(curacion2[index].getCol(),
+                    curacion2[index].getFil(), zelda.getCol(), zelda.getFil());
+                if (distanciaProtagonistaVsHeal == 0) {
+                    zelda.setVida(zelda.getVida() + 0.5);
+                    curacion2.splice(index, 1);
+                }
+            }
             break;
         case 2:
-            zelda.recalcularPosPj(key, mapa.getNivelC());
+            switch (key) {
+                case 'a':
+                case 's':
+                case 'd':
+                case 'w':
+                case 'z':
+                    zelda.recalcularPosPj(key, mapa.getNivelC(), nivelActual);
+                    break;
+                case 'x':
+                    zelda.disparar();
+                    break;
+            }
+            for (let index = 0; index < aracne.length; index++) {
+                let distanciaProtagonistaVsAracne = dist(aracne[index].getCol(),
+                    aracne[index].getFil(), zelda.getCol(), zelda.getFil());
+                if (distanciaProtagonistaVsAracne == 0) {
+                    zelda.setVida(zelda.getVida() - 1);
+                }
+            }
+            for (let index = 0; index < curacion3.length; index++) {
+                let distanciaProtagonistaVsHeal = dist(curacion3[index].getCol(),
+                    curacion3[index].getFil(), zelda.getCol(), zelda.getFil());
+                if (distanciaProtagonistaVsHeal == 0) {
+                    zelda.setVida(zelda.getVida() + 0.5);
+                    curacion3.splice(index, 1);
+                }
+            }
             break;
         case 3:
-            zelda.recalcularPosPj(key, mapa.getNivelD());
+            switch (key) {
+                case 'a':
+                case 's':
+                case 'd':
+                case 'w':
+                case 'z':
+                    zelda.recalcularPosPj(key, mapa.getNivelD(), nivelActual);
+                    break;
+                case 'x':
+                    zelda.disparar();
+                    break;
+            }
+
+            for (let index = 0; index < curacion4.length; index++) {
+                let distanciaProtagonistaVsHeal = dist(curacion4[index].getCol(),
+                    curacion4[index].getFil(), zelda.getCol(), zelda.getFil());
+                if (distanciaProtagonistaVsHeal == 0) {
+                    zelda.setVida(zelda.getVida() + 0.5);
+                    curacion4.splice(index, 1);
+                }
+            }
             break;
     }
 }
@@ -229,23 +354,45 @@ function validarHerirEnemigo() {
         balas.forEach(bala => {
             switch (nivelActual) {
                 case 0:
-                    minotaur.forEach(minotauro => {
-                        if (bala.getActiva() && dist(minotauro.getPositionX(), minotauro.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
-                            minotauro.herir(zelda.getDamage());
+                    minotaur.forEach(element => {
+                        if (bala.getActiva() && dist(element.getPositionX(), element.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
+                            element.herir(zelda.getDamage());
                             bala.desactivar();
-                            if (minotauro.getVida() == 0) {
-                                minotaur.splice(minotauro, 1);
+                            if (element.getVida() == 0) {
+                                minotaur.splice(element, 1);
                             }
                         }
                     });
                     break;
                 case 1:
-                    medusa.forEach(minotauro => {
-                        if (bala.getActiva() && dist(minotauro.getPositionX(), minotauro.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
-                            minotauro.herir(zelda.getDamage());
+                    medusa.forEach(element => {
+                        if (bala.getActiva() && dist(element.getPositionX(), element.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
+                            element.herir(zelda.getDamage());
                             bala.desactivar();
-                            if (minotauro.getVida() == 0) {
-                                medusa.splice(minotauro, 1);
+                            if (element.getVida() == 0) {
+                                medusa.splice(element, 1);
+                            }
+                        }
+                    });
+                    break;
+                case 2:
+                    aracne.forEach(element => {
+                        if (bala.getActiva() && dist(element.getPositionX(), element.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
+                            element.herir(zelda.getDamage());
+                            bala.desactivar();
+                            if (element.getVida() == 0) {
+                                aracne.splice(element, 1);
+                            }
+                        }
+                    });
+                    break;
+                case 3:
+                    charybdis.forEach(element => {
+                        if (bala.getActiva() && dist(element.getPositionX(), element.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
+                            element.herir(zelda.getDamage());
+                            bala.desactivar();
+                            if (element.getVida() == 0) {
+                                charybdis.splice(element, 1);
                             }
                         }
                     });
@@ -265,8 +412,39 @@ function validarCapturaArma() {
 }
 
 function validarMejoraArma() {
-    if (dist(mejora.getFil(), mejora.getCol(), zelda.getFil(), zelda.getCol()) <= 0) {
-        zelda.setDamage(20);
-        console.log(zelda.getDamage());
+
+    switch (nivelActual) {
+        case 1:
+            if (dist(mejora[0].getFil(), mejora[0].getCol(), zelda.getFil(), zelda.getCol()) <= 0) {
+                zelda.setDamage(20);
+                mejora[0].setFil(8);
+                mejora[0].setCol(8);
+                mejora[0].setPositionX(1000);
+                mejora[0].setPositionY(1000);
+            }
+            break;
+        case 2:
+            if (dist(mejora[1].getFil(), mejora[1].getCol(), zelda.getFil(), zelda.getCol()) <= 0) {
+                zelda.setDamage(50);
+                mejora[1].setFil(8);
+                mejora[1].setCol(8);
+                mejora[1].setPositionX(1000);
+                mejora[1].setPositionY(1000);
+            }
+            break;
+        case 3:
+            if (dist(mejora[2].getFil(), mejora[2].getCol(), zelda.getFil(), zelda.getCol()) <= 0) {
+                zelda.setDamage(100);
+                mejora[2].setFil(8);
+                mejora[2].setCol(8);
+                mejora[2].setPositionX(1000);
+                mejora[2].setPositionY(1000);
+            }
+            break;
     }
+
+
+
+
+
 }
