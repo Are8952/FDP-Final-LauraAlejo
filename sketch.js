@@ -1,66 +1,25 @@
-// let nivelA = [
-//     [0, 0, 0, 1, 0, 1, 0, 0],
-//     [1, 0, 0, 0, 0, 0, 0, 0],
-//     [1, 0, 0, 0, 0, 1, 0, 0],
-//     [0, 0, 1, 0, 0, 0, 0, 0],
-//     [0, 1, 1, 0, 0, 0, 1, 0],
-//     [0, 0, 1, 0, 0, 0, 1, 0],
-//     [0, 1, 1, 0, 1, 0, 0, 0],
-//     [4, 0, 1, 0, 0, 0, 0, 3],
-// ];
-
-// let nivelB = [
-//     [0, 0, 0, 0, 0, 1, 0, 3],
-//     [1, 0, 0, 1, 0, 0, 0, 0],
-//     [1, 0, 0, 0, 0, 1, 0, 1],
-//     [0, 0, 0, 1, 0, 0, 0, 1],
-//     [0, 1, 4, 1, 1, 0, 0, 0],
-//     [0, 0, 1, 0, 0, 0, 0, 0],
-//     [0, 1, 1, 0, 0, 1, 0, 0],
-//     [0, 0, 1, 0, 0, 0, 0, 0],
-// ];
-
-// let nivelC = [
-//     [0, 0, 0, 0, 0, 0, 0, 0],
-//     [1, 0, 1, 0, 0, 0, 0, 0],
-//     [1, 0, 0, 0, 0, 1, 0, 0],
-//     [0, 0, 1, 0, 0, 0, 0, 0],
-//     [0, 1, 1, 4, 1, 0, 0, 0],
-//     [0, 0, 1, 1, 0, 1, 0, 0],
-//     [0, 1, 1, 0, 0, 1, 0, 0],
-//     [0, 0, 1, 0, 0, 3, 0, 0],
-// ];
-
-// let nivelD = [
-//     [0, 0, 0, 0, 1, 0, 0, 0],
-//     [1, 0, 1, 0, 0, 0, 0, 0],
-//     [1, 0, 0, 0, 0, 1, 0, 0],
-//     [0, 0, 1, 0, 1, 0, 0, 1],
-//     [0, 1, 1, 0, 0, 0, 0, 3],
-//     [0, 0, 1, 0, 1, 0, 1, 0],
-//     [0, 1, 1, 0, 0, 1, 0, 0],
-//     [0, 0, 1, 4, 1, 1, 0, 1],
-// ];
-
 //movimiento entre los niveles  
 let nivelActual = 0;
 //let niveles = [nivelA, nivelB, nivelC, nivelD];
 let fil = 8; //Tamaño del mapa en el eje Y?
 let colu = 8; //Tamaño del mapa en el eje X?
 
-//Protagonista
-let pjCol = 0;
-let pjFil = 0;
-let pjY = (pjCol * 100) + 50;
-let pjX = (pjFil * 100) + 50;
 
 //Minotaur
 let minoCol = [];
 let minoFil = [];
-minoCol[0] = 2;
-minoFil[0] = 6;
 minoCol[1] = 6;
 minoFil[1] = 7;
+minoCol[0] = 3;
+minoFil[0] = 6;
+
+//Medusa
+let meduCol = [];
+let meduFil = [];
+meduCol[0] = 0;
+meduFil[0] = 6;
+meduCol[1] = 2;
+meduFil[1] = 6;
 
 //Aliado
 let allyCol = 7;
@@ -71,18 +30,25 @@ let zelda; //Declarar el objeto
 let minotaur = []; //Primer Enemigo
 let link = []; //Declaraar el aliado
 let curacion = []; //Objeto
+let medusa = []; //Segundo Enemigo
+let mejora;
 let mapa;
 
-
-let visualizarLaser = true;
-
+let backgroundMap = [];
 
 function setup() {
     createCanvas(100 * fil, 100 * colu + 100);
-    zelda = new Character(50, 50, 0, 0, 1);
-    mapa = new Map();
-    minotaur[0] = new Minotaur(minoCol[0], minoFil[0]);
-    minotaur[1] = new Minotaur(minoCol[1], minoFil[1]);
+    zelda = new Character(50, 50 + (100 * 1), 1, 0, 1, 10);
+    //positionX, positionY, col, fil, vida
+    mapa = new Map(nivelActual);
+    for (let index = 0; index < 2; index++) {
+        minotaur[index] = new Minotaur(minoCol[index], minoFil[index]);
+    }
+
+    for (let index = 0; index < 2; index++) {
+        medusa[index] = new Medusa(meduCol[index], meduFil[index]);
+    }
+
     link[0] = new Ally(7, 0);
     link[1] = new Ally(4, 2);
     link[2] = new Ally(4, 3);
@@ -92,6 +58,14 @@ function setup() {
         curacion.push(new Life(3, 4));
     }
 
+    mejora = new Mejora(5, 3);
+
+    backgroundMap[0] = loadImage("./image/background1.jpg");
+    backgroundMap[1] = loadImage("./image/Hero.png");;
+    backgroundMap[2] = loadImage("./image/Hero.png");;
+    backgroundMap[3] = loadImage("./image/Hero.png");;
+    nivelActual = 0;
+
 }
 
 //los niveles pintados a-d
@@ -99,24 +73,35 @@ function draw() {
     background(220);
     switch (nivelActual) {
         case 0:
-            //console.log(mapa.getNivelA());
-            mapa.pintarNivel(mapa.getNivelA());
+            imageMode(CORNER);
+            image(backgroundMap[0], 0, 0, 800, 800);
             text("Vida: " + zelda.getVida(), 50, 850);
-            minotaur[0].characterDraw();
-            minotaur[1].characterDraw();
-
+            minotaur.forEach(minotauro => {
+                minotauro.characterDraw();
+            });
             validarCapturaArma();
-
+            validarHerirEnemigo();
             link[0].characterDraw();
             if (zelda.getVida() == 0) {
                 nivelActual = 5;
             }
-            curacion[0].characterDraw();
-            curacion[1].characterDraw();
+            curacion.forEach(element => {
+                element.characterDraw();
+            });
             break;
         case 1:
-            mapa.pintarNivel(mapa.getNivelB());
+            mapa.pintarNivel(mapa.getNivelB(), nivelActual);
+            validarCapturaArma();
+            validarMejoraArma();
             link[1].characterDraw();
+            mejora.mostrar();
+            //MEDUSA
+            validarHerirEnemigo();
+            medusa.forEach(element => {
+                element.characterDraw();
+                //element.mover();
+            });
+
             break;
         case 2:
 
@@ -139,28 +124,9 @@ function draw() {
             text("PERDISTE", width / 2, height / 2);
             break;
     }
-    //ellipse(pjX,pjY,50,50);
     zelda.characterDraw();
 
 }
-
-
-// function pintarNivel(nivel) {
-//     for (let fila = 0; fila < fil; fila++) {
-//         for (let col = 0; col < colu; col++) {
-//             if (nivel[fila][col] == 0 || nivel[fila][col] == 4) {
-//                 fill(255);
-//             } else if (nivel[fila][col] == 3) {
-//                 fill(0, 255, 255);
-//             } else {
-//                 fill(1);
-//             }
-//             rect(col * 100, fila * 100, 100, 100);
-//         }
-//     }
-//     laser.mostrar();
-// }
-
 
 //movimiento de nuestro personaje 
 function keyPressed() {
@@ -171,10 +137,11 @@ function keyPressed() {
                 case 's':
                 case 'd':
                 case 'w':
+                case 'z':
                     zelda.recalcularPosPj(key, mapa.getNivelA());
                     break;
                 case 'x':
-                    mapa.getLaser().disparar();
+                    zelda.disparar();
                     break;
             }
             for (let index = 0; index < minotaur.length; index++) {
@@ -194,7 +161,18 @@ function keyPressed() {
             }
             break;
         case 1:
-            zelda.recalcularPosPj(key, mapa.getNivelB());
+            switch (key) {
+                case 'a':
+                case 's':
+                case 'd':
+                case 'w':
+                case 'z':
+                    zelda.recalcularPosPj(key, mapa.getNivelB());
+                    break;
+                case 'x':
+                    zelda.disparar();
+                    break;
+            }
             break;
         case 2:
             zelda.recalcularPosPj(key, mapa.getNivelC());
@@ -205,21 +183,54 @@ function keyPressed() {
     }
 }
 
-function validarHerirEnemigo(enemigos) {
-    let laserRef = pj.getLaser();
-    if (laserRef != null) {
+function validarHerirEnemigo() {
+    let laserRef;
+
+    laserRef = zelda.getArma();
+
+    if (laserRef !== null) {
         let balas = laserRef.getMunicion();
         balas.forEach(bala => {
-            if (dist(enemigos.getPositionX(), enemigos.getPositionY(), bala.getPositionX(), bala.getPositionY()) > 10) {
-                enemigos.herir(5);
+            switch (nivelActual) {
+                case 0:
+                    minotaur.forEach(minotauro => {
+                        if (bala.getActiva() && dist(minotauro.getPositionX(), minotauro.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
+                            minotauro.herir(zelda.getDamage());
+                            bala.desactivar();
+                            if (minotauro.getVida() == 0) {
+                                minotaur.splice(minotauro, 1);
+                            }
+                        }
+                    });
+                    break;
+                case 1:
+                    medusa.forEach(minotauro => {
+                        if (bala.getActiva() && dist(minotauro.getPositionX(), minotauro.getPositionY(), bala.getPositionX(), bala.getPositionY()) < 20) {
+                            minotauro.herir(zelda.getDamage());
+                            bala.desactivar();
+                            if (minotauro.getVida() == 0) {
+                                medusa.splice(minotauro, 1);
+                            }
+                        }
+                    });
+                    break;
             }
         });
     }
 }
 
 function validarCapturaArma() {
-    if (dist(mapa.getLaser().getPositionX(), mapa.getLaser().getPositionY(), zelda.getPositionX(), zelda.getPositionY()) < 50) {
-        zelda.agregarAlInventario(mapa.getLaser());
-        visualizarLaser = false;
+    if (mapa.getLaser() !== null) {
+        if (dist(mapa.getLaser().getPositionX(), mapa.getLaser().getPositionY(), zelda.getPositionX(), zelda.getPositionY()) < 50) {
+            zelda.agregarAlInventario(mapa.getLaser());
+            mapa.liberarLaser();
+        }
+    }
+}
+
+function validarMejoraArma() {
+    if (dist(mejora.getFil(), mejora.getCol(), zelda.getFil(), zelda.getCol()) <= 0) {
+        zelda.setDamage(20);
+        console.log(zelda.getDamage());
     }
 }

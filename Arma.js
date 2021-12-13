@@ -7,7 +7,19 @@ class Arma {
         this.municion = [];
     }
 
-    mostrar() {
+    setFila(fila) {
+        this.fila = fila;
+    }
+
+    setCol(col) {
+        this.col = col;
+    }
+
+    getMunicion() {
+        return this.municion;
+    }
+
+    mostrar(nx, ny) {
         fill(0, 255, 255);
         ellipse(this.positionX, this.positionY, 25, 25);
         for (let index = 0; index < this.municion.length; index++) {
@@ -28,5 +40,12 @@ class Arma {
 
     getPositionY() {
         return this.positionY;
+    }
+
+
+
+    actualizarPos(nx, ny) {
+        this.positionX = nx;
+        this.positionY = ny;
     }
 }

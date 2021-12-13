@@ -1,20 +1,37 @@
 class Character {
-    constructor(positionX, positionY, col, fil, vida) {
+    constructor(positionX, positionY, col, fil, vida, damage) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.col = col;
         this.fil = fil;
         this.vida = vida;
         this.inventario = [];
+        this.imageCharacter = loadImage("./image/Hero.png");
+        this.damage = damage;
+        //img = loadImage('assets/laDefense.jpg');
+    }
+
+    getInventario() {
+        return this.inventario;
+    }
+
+    getArma() {
+        if (this.validarLaser()) {
+            return this.inventario[0];
+        }
+        return null;
     }
 
     characterDraw() {
         fill(0, 0, 255);
-        ellipse(this.positionX, this.positionY, 50, 50);
+        //ellipse(this.positionX, this.positionY, 50, 50);
+        imageMode(CENTER);
+        image(this.imageCharacter, this.positionX, this.positionY, 100, 100);
         //console.log(this.validarLaser);
         if (this.validarLaser()) {
             fill(255);
             circle(this.positionX, this.positionY, 20);
+            this.inventario[0].mostrar();
         }
     }
 
@@ -44,8 +61,7 @@ class Character {
                 break;
             case 'z': //Talk
                 if (nivel[this.col + 1][this.fil] == 4) {
-                    console.log("BOOM");
-                    alert("Profe dejenos el 5 porfis :3");
+                    alert("Toma el arma y recuerda que solo puedes disparar a tu derecha");
                 }
                 break;
         }
@@ -53,9 +69,14 @@ class Character {
             this.fil = 0;
             this.col = 0;
             nivelActual += 1;
+            this.tengoArma = false;
+
         }
         this.positionX = (this.fil * 100) + 50;
         this.positionY = (this.col * 100) + 50;
+        if (this.validarLaser()) {
+            this.inventario[0].actualizarPos(this.positionX, this.positionY);
+        }
     }
 
     validarLaser() {
@@ -66,6 +87,14 @@ class Character {
             }
         }
         return hayLaser;
+    }
+
+    disparar(nivel) {
+        if (this.validarLaser()) {
+            this.inventario[0].disparar();
+        } else {
+            console.log("piu");
+        }
     }
 
     agregarAlInventario(nuevoItem) {
@@ -111,4 +140,14 @@ class Character {
     setVida(vida) {
         this.vida = vida;
     }
+
+    getDamage() {
+        return this.damage;
+    }
+
+    setDamage(damage) {
+        this.damage = damage;
+    }
+
+
 }

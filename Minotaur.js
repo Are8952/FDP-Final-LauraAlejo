@@ -1,15 +1,17 @@
 class Minotaur extends Enemy {
     constructor(col, fil, nivelActual) {
         super(col, fil, nivelActual);
+        this.image = loadImage("./image/Minotaur.png");
+        this.vida = 100;
     }
 
     characterDraw() {
-        fill(255, 0, 0);
-        ellipse(this.positionX, this.positionY, 50, 50);
-    }
-
-    damage() {
-
+        //fill(255, 0, 0);
+        fill(255, 255, 250);
+        text("Vida: " + this.vida, this.positionX - 20, this.positionY + 50);
+        //ellipse(this.positionX, this.positionY, 50, 50);
+        imageMode(CENTER);
+        image(this.image, this.positionX, this.positionY, 100, 100);
     }
 
     getCol() {
@@ -27,5 +29,7 @@ class Minotaur extends Enemy {
     setFil(fil) {
         this.fil = fil;
     }
+
+
 
 }

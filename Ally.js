@@ -5,11 +5,13 @@ class Ally {
         this.col = col;
         this.fil = fil;
         this.nivelActual = nivelActual;
+        this.image = loadImage("./Image/Athena.png");
     }
 
     characterDraw() {
         fill(0, 255, 0);
-        ellipse(this.positionX, this.positionY, 50, 50);
+        // ellipse(this.positionX, this.positionY, 50, 50);
+        image(this.image, this.positionX, this.positionY, 100, 100);
     }
 
     setCol(col) {
