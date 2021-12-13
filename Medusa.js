@@ -8,6 +8,7 @@ class Medusa extends Enemy {
     characterDraw() {
         fill(255, 0, 0);
         //ellipse(this.positionX, this.positionY, 50, 50);
+        imageMode(CENTER);
         image(this.image, this.positionX, this.positionY, 100, 100);
         text("Vida: " + this.vida, this.positionX - 20, this.positionY + 50);
     }

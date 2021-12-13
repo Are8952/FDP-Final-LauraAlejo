@@ -21,6 +21,22 @@ meduFil[0] = 6;
 meduCol[1] = 2;
 meduFil[1] = 6;
 
+//Aracne
+let aracCol = [];
+let aracFil = [];
+aracCol[0] = 2;
+aracFil[0] = 6;
+aracCol[1] = 5;
+aracFil[1] = 6;
+
+//Marino
+let charCol = [];
+let charFil = [];
+charCol[0] = 2;
+charFil[0] = 3;
+charCol[1] = 5;
+charFil[1] = 7;
+
 //Aliado
 let allyCol = 7;
 let allyFil = 0;
@@ -31,6 +47,8 @@ let minotaur = []; //Primer Enemigo
 let link = []; //Declaraar el aliado
 let curacion = []; //Objeto
 let medusa = []; //Segundo Enemigo
+let aracne = []; //Tercer Enemigo
+let charybdis = []; //Cuarto Enemigo
 let mejora;
 let mapa;
 
@@ -49,6 +67,14 @@ function setup() {
         medusa[index] = new Medusa(meduCol[index], meduFil[index]);
     }
 
+    for (let index = 0; index < 2; index++) {
+        aracne[index] = new Aracne(aracCol[index], aracFil[index]);
+    }
+
+    for (let index = 0; index < 2; index++) {
+        charybdis[index] = new Charybdis(charCol[index], charFil[index]);
+    }
+
     link[0] = new Ally(7, 0);
     link[1] = new Ally(4, 2);
     link[2] = new Ally(4, 3);
@@ -61,10 +87,10 @@ function setup() {
     mejora = new Mejora(5, 3);
 
     backgroundMap[0] = loadImage("./image/background1.jpg");
-    backgroundMap[1] = loadImage("./image/Hero.png");;
-    backgroundMap[2] = loadImage("./image/Hero.png");;
-    backgroundMap[3] = loadImage("./image/Hero.png");;
-    nivelActual = 0;
+    backgroundMap[1] = loadImage("./image/background2.jpg");;
+    backgroundMap[2] = loadImage("./image/background3.jpg");;
+    backgroundMap[3] = loadImage("./image/background4.jpg");;
+    nivelActual = 3;
 
 }
 
@@ -90,7 +116,8 @@ function draw() {
             });
             break;
         case 1:
-            mapa.pintarNivel(mapa.getNivelB(), nivelActual);
+            imageMode(CORNER);
+            image(backgroundMap[1], 0, 0, 800, 800);
             validarCapturaArma();
             validarMejoraArma();
             link[1].characterDraw();
@@ -104,14 +131,23 @@ function draw() {
 
             break;
         case 2:
-
-            mapa.pintarNivel(mapa.getNivelC());
+            imageMode(CORNER);
+            image(backgroundMap[2], 0, 0, 800, 800);
             link[2].characterDraw();
+            aracne.forEach(element => {
+                element.characterDraw();
+                //element.mover();
+            });
             break;
         case 3:
-
-            mapa.pintarNivel(mapa.getNivelD());
+            imageMode(CORNER);
+            image(backgroundMap[3], 0, 0, 800, 800);
             link[3].characterDraw();
+            charybdis.forEach(element => {
+                element.characterDraw();
+                element.mover();
+            });
+
             break;
         case 4:
             text("GANASTE", width / 2, height / 2);

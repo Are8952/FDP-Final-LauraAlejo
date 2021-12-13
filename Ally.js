@@ -11,6 +11,7 @@ class Ally {
     characterDraw() {
         fill(0, 255, 0);
         // ellipse(this.positionX, this.positionY, 50, 50);
+        imageMode(CENTER);
         image(this.image, this.positionX, this.positionY, 100, 100);
     }
 
