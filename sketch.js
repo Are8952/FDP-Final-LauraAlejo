@@ -110,9 +110,9 @@ function setup() {
     // mejora3 = new Mejora();
 
     backgroundMap[0] = loadImage("./Image/background1.jpg");
-    backgroundMap[1] = loadImage("./Image/background2.jpg");;
-    backgroundMap[2] = loadImage("./Image/background3.jpg");;
-    backgroundMap[3] = loadImage("./Image/background4.jpg");;
+    backgroundMap[1] = loadImage("./Image/background2.jpg");
+    backgroundMap[2] = loadImage("./Image/background3.jpg");
+    backgroundMap[3] = loadImage("./Image/background4.jpg");
 
     nivelActual = 0;
 
