@@ -6,7 +6,7 @@ class Character {
         this.fil = fil;
         this.vida = vida;
         this.inventario = [];
-        this.imageCharacter = loadImage("./Image/Hero.png");
+        this.imageCharacter = loadImage("Image/Hero.png");
         this.rayo = loadImage("./Image/Rayo.png");
         this.damage = damage;
         //img = loadImage('assets/laDefense.jpg');
