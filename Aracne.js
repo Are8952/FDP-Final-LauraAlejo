@@ -6,7 +6,7 @@ class Aracne extends Enemy {
     }
 
     characterDraw() {
-        // fill(255, 0, 0);
+        fill(255);
         // ellipse(this.positionX, this.positionY, 50, 50);
         imageMode(CENTER);
         image(this.image, this.positionX, this.positionY, 100, 100);

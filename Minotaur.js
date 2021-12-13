@@ -7,7 +7,7 @@ class Minotaur extends Enemy {
 
     characterDraw() {
         //fill(255, 0, 0);
-        fill(255, 255, 250);
+        fill(255);
         text("Vida: " + this.vida, this.positionX - 20, this.positionY + 50);
         //ellipse(this.positionX, this.positionY, 50, 50);
         imageMode(CENTER);

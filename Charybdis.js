@@ -7,6 +7,7 @@ class Charybdis extends Enemy {
     }
 
     characterDraw() {
+        fill(255);
         imageMode(CENTER);
         image(this.image, this.positionX, this.positionY, 100, 100);
         text("Vida: " + this.vida, this.positionX - 20, this.positionY + 50);

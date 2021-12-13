@@ -120,13 +120,16 @@ function setup() {
 
 //los niveles pintados a-d
 function draw() {
-    background(220);
+    background(0);
     switch (nivelActual) {
         case 0:
             imageMode(CORNER);
             image(backgroundMap[0], 0, 0, 800, 800);
-            fill(0);
+            fill(255);
+            textSize(20);
             text("Vida: " + zelda.getVida(), 50, 850);
+            text("Daño: " + zelda.getDamage(), 650, 850);
+            textSize(15);
             minotaur.forEach(minotauro => {
                 minotauro.characterDraw();
             });
@@ -153,8 +156,11 @@ function draw() {
                 element.characterDraw();
                 //element.mover();
             });
-            fill(0);
+            fill(255);
+            textSize(20);
             text("Vida: " + zelda.getVida(), 50, 850);
+            text("Daño: " + zelda.getDamage(), 650, 850);
+            textSize(15);
             if (zelda.getVida() == 0) {
                 nivelActual = 5;
             }
@@ -180,8 +186,11 @@ function draw() {
             curacion3.forEach(element => {
                 element.characterDraw();
             });
-            fill(0);
+            fill(255);
+            textSize(20);
             text("Vida: " + zelda.getVida(), 50, 850);
+            text("Daño: " + zelda.getDamage(), 650, 850);
+            textSize(15);
             break;
         case 3:
             imageMode(CORNER);
@@ -208,12 +217,17 @@ function draw() {
                     zelda.setVida(zelda.getVida() - 1);
                 }
             }
+            fill(255);
+            textSize(20);
+            text("Vida: " + zelda.getVida(), 50, 850);
+            text("Daño: " + zelda.getDamage(), 650, 850);
+            textSize(15);
             break;
         case 4:
             fill(0, 0, 0);
             textSize(100);
             textAlign(CENTER);
-            background(0, 0, 255);
+            background(0, 100, 150);
             text("GANASTE", width / 2, height / 2);
             break;
         case 5:
